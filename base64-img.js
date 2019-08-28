@@ -1,6 +1,10 @@
-var fs = require('file-system');
-var path = require('path');
-var request = require('ajax-request');
+// var fs = require('file-system');
+// var path = require('path');
+// var request = require('ajax-request');
+var fs;
+var path;
+var request;
+var http;
 
 function base64(filename, data) {
   var extname = path.extname(filename).substr(1);
@@ -32,6 +36,13 @@ function img(data) {
     extname: '.' + extname,
     base64: match[2]
   };
+}
+
+exports.setFsAndPathAndRequestAndHttp = function(f, p, r, h) {
+  fs = f;
+  path = p;
+  request = r;
+  http = h;
 }
 
 /**
@@ -82,7 +93,7 @@ exports.requestBase64 = function(url, callback) {
 
     var data = 'data:' + res.headers['content-type'] + ';base64,' + body.toString('base64');
     callback(err, res, data);
-  });
+  }, http, path, fs);
 };
 
 /**
